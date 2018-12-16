@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+
 import './style.sass'
+
+import TextLink from '../TextLink/TextLink'
 
 const createGetShortestUrl = (Url) => {
   return new Promise((resolve, reject) => {
@@ -22,6 +25,7 @@ class ShortestUrl extends Component {
       insertedUrl: "",
       response: "",
       inputValue: "",
+      action: 1,
     }
   }
 
@@ -39,7 +43,10 @@ class ShortestUrl extends Component {
       createGetShortestUrl(finalValue).then(
         resolve =>
         {
-          this.setState({ response: resolve, inputValue: "" })
+          const newAction = "Url indicated doesn't work, make sure it's correct !"
+          const isRigthResponse = newAction === resolve
+          
+          this.setState({ action: isRigthResponse, response: resolve, inputValue: "" })
         },
         error => {
           console.log('eerrrororor')
@@ -57,7 +64,7 @@ class ShortestUrl extends Component {
       <div className="shortComponents">
         <input className="inputBottom" onChange={(context) => this.updateContext(context)} type="text" value={this.state.inputValue} placeholder="Insert the URL"></input>
         <button onClick={this.processClick}>Process</button>
-        <p>{this.state.response}</p>
+        <TextLink action={this.state.action} url={this.state.response} />
       </div>
 
     )

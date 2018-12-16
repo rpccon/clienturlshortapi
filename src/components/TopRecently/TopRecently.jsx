@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+
 import './styles.sass'
 
+import TextLink from '../TextLink/TextLink'
 import ComponentsContainer from '../ComponentsContainer/ComponentsContainer'
 
 const selectedPagStyle = 'tableComp'
@@ -11,11 +13,14 @@ const tableStyle = 'tableByProvider'
 const containerStyle = 'grayFont'
 const searchBoxStyle = 'searchBoxStyle'
 const columnFields = [
-  { id:'url', label: 'Url', width: 1 },
+  { id:'link', label: 'Url', width: 1 },
   { id:'title', label: 'Title tag', width: 1 },
 ]
+const getTextLink = (link) => (
+  <TextLink url={link} />
+)
 const buildDataAsJson = (data) => (
-  data.map((elem) => ({ 'url': elem[0], 'title': elem[1]  }))
+  data.map((elem) => ({ 'link': getTextLink(elem[0]), 'title': elem[1]  }))
 )
 const getTopRecentlyUrls = (updateState) => {
   return new Promise((resolve, reject) => {
