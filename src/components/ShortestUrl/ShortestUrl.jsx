@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
-const inputContextValue = {}
-
 const createGetShortestUrl = (Url) => {
   return new Promise((resolve, reject) => {
     axios.get(`https://urlshortapiserver.herokuapp.com/validateFullPath?url=${Url}`)
@@ -22,38 +20,40 @@ class ShortestUrl extends Component {
     this.state = {
       insertedUrl: "",
       response: "",
+      inputValue: "",
     }
   }
 
   updateContext(context){
-    inputContextValue['value'] = context.target.value
+    const inputValue = context.target.value
+
+    this.setState({ inputValue })
   }
 
   processClick = () => {
-    const { value } = inputContextValue
+    const finalValue = this.state.inputValue
 
-    if(value){
+    if(finalValue !== ""){
       
-      createGetShortestUrl(value).then(
+      createGetShortestUrl(finalValue).then(
         resolve =>
         {
-          this.setState({ response: resolve })
+          this.setState({ response: resolve, inputValue: "" })
         },
         error => {
-          this.setState({ response: "There was an error with server connection !" })
+          this.setState({ response: "There was an error with server connection !", inputValue: "" })
         }
       )      
     } else {
       this.setState({ response: "You need to insert an URL" })
     }
-
   }
 
   render() {
     return (
       <div>
         <div>
-          <input onChange={(context) => this.updateContext(context)} type="text" placeholder="Insert the URL"></input>
+          <input onChange={(context) => this.updateContext(context)} type="text" value={this.state.inputValue} placeholder="Insert the URL"></input>
           <label>{this.state.response}</label>
         </div>
         <button onClick={this.processClick}>Process</button>
