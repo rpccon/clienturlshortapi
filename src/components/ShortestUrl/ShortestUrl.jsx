@@ -45,12 +45,10 @@ class ShortestUrl extends Component {
         {
           const newAction = "Url indicated doesn't work, make sure it's correct !"
           const isRigthResponse = newAction === resolve
-          
+
           this.setState({ action: isRigthResponse, response: resolve, inputValue: "" })
         },
         error => {
-          console.log('eerrrororor')
-          console.log(error)
           this.setState({ response: "There was an error with server connection !", inputValue: "" })
         }
       )      

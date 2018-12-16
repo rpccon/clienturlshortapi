@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import './style.sass'
+
 import TopRecently from '../TopRecently/TopRecently'
 import ShortestUrl from '../ShortestUrl/ShortestUrl'
 
@@ -20,7 +22,7 @@ class SelectionComponent extends Component {
 
   render() {
     return(
-      <div>
+      <div className="general">
         <select onChange={() => this.onChangeClick()}>
           <option value="topRecently">Top recently visited Urls</option>
           <option value="genShortest">Generate shortest URL</option>

@@ -1,12 +1,13 @@
 import React from 'react'
 
-const TextLink = (props) => {
-  const { action, url } = props
-  console.log('props')
-  
-  return (
-    action ? <p>{url}</p> : <a rel="noopener noreferrer" target="_blank" href={url}>{url}</a>
-  )
-}
+import './style.sass'
+
+const TextLink = ({ action, url }) => (
+  <div className="division">
+    {action
+      ?<p>{url}</p>
+      :<a rel="noopener noreferrer" target="_blank" href={url}>{url}</a>}
+  </div>
+)
 
 export default TextLink

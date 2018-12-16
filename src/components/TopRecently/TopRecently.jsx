@@ -56,7 +56,6 @@ class TopRecently extends Component {
       getTopRecentlyUrls().then(
         resolve =>
         {
-          console.log('makes this')
           this.setState({ datasets: resolve, successRequest: 1 })
         },
         error => {
@@ -64,7 +63,7 @@ class TopRecently extends Component {
         }
       )
     }
-    console.log('renderea')
+
     return (
       <div className="top100Area">
         {this.state.errorMessage === ""
