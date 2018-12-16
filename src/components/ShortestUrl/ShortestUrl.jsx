@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import './style.sass'
 
 const createGetShortestUrl = (Url) => {
   return new Promise((resolve, reject) => {
@@ -41,6 +42,8 @@ class ShortestUrl extends Component {
           this.setState({ response: resolve, inputValue: "" })
         },
         error => {
+          console.log('eerrrororor')
+          console.log(error)
           this.setState({ response: "There was an error with server connection !", inputValue: "" })
         }
       )      
@@ -51,12 +54,10 @@ class ShortestUrl extends Component {
 
   render() {
     return (
-      <div>
-        <div>
-          <input onChange={(context) => this.updateContext(context)} type="text" value={this.state.inputValue} placeholder="Insert the URL"></input>
-          <label>{this.state.response}</label>
-        </div>
+      <div className="shortComponents">
+        <input className="inputBottom" onChange={(context) => this.updateContext(context)} type="text" value={this.state.inputValue} placeholder="Insert the URL"></input>
         <button onClick={this.processClick}>Process</button>
+        <p>{this.state.response}</p>
       </div>
 
     )

@@ -17,8 +17,8 @@ const Row = ({ dataTable, columnFields }) => {
   return (
     dataTable.map((item, index) => (
       <tr key={index}>
-        {item.map((subItem) => (
-            <td  key={subItem}>{subItem}</td>
+        {item.map((subItem, position) => (
+            <td  key={position}>{subItem}</td>
           ))}
       </tr>      
     ))
