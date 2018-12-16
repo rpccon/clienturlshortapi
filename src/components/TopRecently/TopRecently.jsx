@@ -31,54 +31,55 @@ const getTopRecentlyUrls = (updateState) => {
   })
 }
 
-class MainComponent extends Component {
+class TopRecently extends Component {
 
   constructor(props){
     super(props)
 
     this.state = {
       datasets: [],
+      successRequest: 0,
       errorMessage: "",
     }
   }
 
   render() {
-    const emptyValidation = this.state.datasets.length === 0 && this.state.errorMessage === ""
-    
+    const emptyValidation = this.state.datasets.length === 0 && !this.state.successRequest
+        
     if(emptyValidation){
 
       getTopRecentlyUrls().then(
         resolve =>
         {
-          this.setState({ datasets: resolve })
+          console.log('makes this')
+          this.setState({ datasets: resolve, successRequest: 1 })
         },
         error => {
           this.setState({ errorMessage: "There was an error with server connection !" })
         }
       )
     }
-
+    console.log('renderea')
     return (
-        
-        <div className="top100Area">
-          {this.state.errorMessage === ""
-          ?<ComponentsContainer
-            tractNumber={5}
-            maxItemsPag={5}
-            columnFields={columnFields}
-            dataSets={this.state.datasets}
-            searchBoxPlaceHolder={searchBoxPlaceHolder}
-            containerStyle={containerStyle}
-            selectedItemPagStyle={selectedPagStyle}
-            paginationStyle={paginationStyle}
-            tableStyle={tableStyle}
-            searchBoxStyle={searchBoxStyle}
-          />
-          : <h2>{this.state.errorMessage}</h2>
-          }
+      <div className="top100Area">
+        {this.state.errorMessage === ""
+        ?<ComponentsContainer
+          tractNumber={5}
+          maxItemsPag={5}
+          columnFields={columnFields}
+          dataSets={this.state.datasets}
+          searchBoxPlaceHolder={searchBoxPlaceHolder}
+          containerStyle={containerStyle}
+          selectedItemPagStyle={selectedPagStyle}
+          paginationStyle={paginationStyle}
+          tableStyle={tableStyle}
+          searchBoxStyle={searchBoxStyle}
+        />
+        : <h2>{this.state.errorMessage}</h2>
+        }
       </div>
     )
   }
 }
 
-export default MainComponent
+export default TopRecently
