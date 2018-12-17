@@ -1,7 +1,7 @@
 import { compose, withHandlers, withState, withPropsOnChange } from 'recompose'
 
 const CERO = 0
-const UNO = 1
+const ONE = 1
 const DOS = 2
 const PERCENTAGE_LEFT = 0.5
 const EMPTY_ARRAY = []
@@ -11,7 +11,7 @@ const INITIAL_STATE = {
     dataTableOrdered: EMPTY_ARRAY,
     allButtons: EMPTY_ARRAY,
     tractBuilt: EMPTY_ARRAY,
-    activeNumberPag: UNO,
+    activeNumberPag: ONE,
     leftButtons: CERO,
     rightButtons: CERO
   },
@@ -30,14 +30,14 @@ const _buildDataTable = (columnFields, dataSets) => {
   return finalDataSets
 }
 const _generateDataTableFiltered = (selection, dataSets, maxTableItems) => {
-  const selectedPosition = (selection - UNO) * maxTableItems
+  const selectedPosition = (selection - ONE) * maxTableItems
   const firstSliceData = dataSets.slice(selectedPosition, dataSets.length)
   const finalPosition = firstSliceData.length >= maxTableItems ? maxTableItems : firstSliceData.length
 
   return firstSliceData.slice(CERO, finalPosition)
 }
 const _makeTernaryOperation = (isTrueValue, resultA, resultB) => (isTrueValue ? resultA : resultB)
-const _calculateGenericRangeButtonsWayAdd = (valueA, valueB, result) => (((result - valueA) / (valueB + UNO)))
+const _calculateGenericRangeButtonsWayAdd = (valueA, valueB, result) => (((result - valueA) / (valueB + ONE)))
 const getRightLeftPositions = (params) => {
   const { activeNumber, wayButtons, wayUntilPosition, isRight } = params
 
@@ -48,7 +48,7 @@ const getRightLeftPositions = (params) => {
     return [rightLeftA, rightLeftB]
   }
 
-  return [- UNO, - UNO]
+  return [- ONE, - ONE]
 }
 const getCalculatePositions = (params) => {
   const { activeNumber, wayButtons, wayUntilPosition } = params
@@ -74,7 +74,7 @@ const _buildStartEndPositions = (start, end) => ({ start, end })
 const _analyzePositionWithEnds = (params) => {
   const { rightUntilPosition, rightButtons, leftUntilPosition, leftButtons, activeNumber } = params
   const leftRange = _validateRangeButtonsWay(leftUntilPosition, leftButtons, activeNumber)
-  const rightRange = _validateRangeButtonsWay(rightUntilPosition, rightButtons, activeNumber, UNO)
+  const rightRange = _validateRangeButtonsWay(rightUntilPosition, rightButtons, activeNumber, ONE)
   const { position: posLeft, need: needLeft, surPlus: surLeft } = leftRange
   const { position: posRight, need: needRight, surPlus: surRight } = rightRange
   
@@ -94,7 +94,7 @@ const _analyzePositionWithEnds = (params) => {
 }
 const _buildTractPositionsArray = (state, activeNumber, allButtonsArray) => {
   const { values: { leftButtons, rightButtons }} = state
-  const leftUntilPosition = allButtonsArray.slice(CERO, activeNumber - UNO).length
+  const leftUntilPosition = allButtonsArray.slice(CERO, activeNumber - ONE).length
   const rightUntilPosition = allButtonsArray.slice(activeNumber, allButtonsArray.length).length
   const params = { rightUntilPosition, rightButtons, leftUntilPosition, leftButtons, activeNumber }
   const { start, end } = _analyzePositionWithEnds(params)
@@ -104,7 +104,7 @@ const _buildTractPositionsArray = (state, activeNumber, allButtonsArray) => {
 const _manageLeftRightButtonsPag = (maxItemsPag) => {
   const leftResult = maxItemsPag * PERCENTAGE_LEFT
   const leftButtons = leftResult % DOS !== CERO ? Math.trunc(leftResult) : leftResult
-  const rightButtons = maxItemsPag - UNO - leftButtons
+  const rightButtons = maxItemsPag - ONE - leftButtons
 
   return({ leftButtons, rightButtons })
 }
@@ -114,18 +114,18 @@ const _buildContentPagination = (lengthItems, tractNumber, selectedButtonStyle, 
   ))
 )
 const _calculateQuantityButtons = (lengthItems, tractNumber) => {
-  const modButtonsPagination = lengthItems % tractNumber === CERO ? CERO : UNO
+  const modButtonsPagination = lengthItems % tractNumber === CERO ? CERO : ONE
   const entirePartDiv = Math.trunc(lengthItems / tractNumber)
 
-  return [...Array(entirePartDiv + modButtonsPagination + UNO).keys()].slice(UNO)
+  return [...Array(entirePartDiv + modButtonsPagination + ONE).keys()].slice(ONE)
 }
 const _includeArrowButtonsPagination = (numberButtons, activeNumber,lengthButtons) => {
   const findArrowInside = numberButtons.find((elem) => elem.label === '<<')
   const newNumberButtons = findArrowInside ? numberButtons.slice(DOS, numberButtons.length - DOS) : numberButtons
   const allButtons = [
-    { label: '<<', numberOnclick: UNO, disabled: _isButtonDisabled(activeNumber, UNO)},
-    { label: '<', numberOnclick: activeNumber - UNO, disabled: _isButtonDisabled(activeNumber, UNO)},
-    { label: '>', numberOnclick: activeNumber + UNO, disabled: _isButtonDisabled(activeNumber, lengthButtons) },
+    { label: '<<', numberOnclick: ONE, disabled: _isButtonDisabled(activeNumber, ONE)},
+    { label: '<', numberOnclick: activeNumber - ONE, disabled: _isButtonDisabled(activeNumber, ONE)},
+    { label: '>', numberOnclick: activeNumber + ONE, disabled: _isButtonDisabled(activeNumber, lengthButtons) },
     { label: '>>', numberOnclick: lengthButtons, disabled: _isButtonDisabled(activeNumber, lengthButtons) },    
   ]
 
@@ -159,16 +159,16 @@ export default compose(
   withState('state', 'updateState', INITIAL_STATE),
   withPropsOnChange(['dataSets'], (props) => {
     const { columnFields, selectedItemPagStyle, dataSets, tractNumber, updateState, maxItemsPag } = props
-    const newAllButtons = _buildContentPagination(dataSets.length, tractNumber, selectedItemPagStyle, UNO)
+    const newAllButtons = _buildContentPagination(dataSets.length, tractNumber, selectedItemPagStyle, ONE)
     const tractBuilt = newAllButtons.length >= maxItemsPag ? newAllButtons.slice(CERO, maxItemsPag) : newAllButtons
     const leftRigthValues = _validateItemsQuantityAccepted(maxItemsPag, tractBuilt.length)
-    const withArrowButtons = _includeArrowButtonsPagination(tractBuilt, UNO, newAllButtons.length)
+    const withArrowButtons = _includeArrowButtonsPagination(tractBuilt, ONE, newAllButtons.length)
     const dataTableOrdered = _buildDataTable(columnFields, dataSets)
-    const dataTable= _generateDataTableFiltered(UNO, dataTableOrdered, tractNumber)
+    const dataTable= _generateDataTableFiltered(ONE, dataTableOrdered, tractNumber)
     const values = {
       dataTable,
       dataTableOrdered,
-      activeNumberPag: UNO,
+      activeNumberPag: ONE,
       tractBuilt: withArrowButtons,
       allButtons: newAllButtons,
       ...leftRigthValues

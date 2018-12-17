@@ -10,17 +10,18 @@ import {
   SERVER_ERROR,
   EMPTY_STRING,
   URL_NO_INSERTED,
+  INSERT_THE_URL,
+  TYPE_TEXT,
+  SHORT_COMPONENTS,
+  INPUT_BOTTOM,
+  PROCESS,
+  ONE
 } from '../../helpers/strings'
 
-
-
-
-
-
-const createGetShortestUrl = (Url) => {
+const createGetShortestUrl = (url) => {
   return new Promise((resolve, reject) => {
     axios.post(VALIDATE_FULL_PATH,{
-      "url": Url
+      url
     })
     .then(
       res => {
@@ -39,7 +40,7 @@ class ShortestUrl extends Component {
       insertedUrl: EMPTY_STRING,
       response: EMPTY_STRING,
       inputValue: EMPTY_STRING,
-      action: 1,
+      action: ONE,
     }
   }
 
@@ -53,7 +54,7 @@ class ShortestUrl extends Component {
     const finalValue = this.state.inputValue
 
     if(finalValue !== EMPTY_STRING){
-      
+ 
       createGetShortestUrl(finalValue).then(
         resolve =>
         {
@@ -71,13 +72,20 @@ class ShortestUrl extends Component {
   }
 
   render() {
+    const { inputValue, response, action } = this.state
+    
     return (
-      <div className="shortComponents">
-        <input className="inputBottom" onChange={(context) => this.updateContext(context)} type="text" value={this.state.inputValue} placeholder="Insert the URL"></input>
-        <button onClick={this.processClick}>Process</button>
-        <TextLink action={this.state.action} url={this.state.response} />
+      <div className={SHORT_COMPONENTS}>
+        <input
+          className={INPUT_BOTTOM}
+          onChange={(context) => this.updateContext(context)}
+          type={TYPE_TEXT}
+          value={inputValue}
+          placeholder={INSERT_THE_URL}>
+        </input>
+        <button onClick={this.processClick}>{PROCESS}</button>
+        <TextLink action={action} url={response} />
       </div>
-
     )
   }
 }

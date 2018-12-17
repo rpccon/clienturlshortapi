@@ -5,26 +5,30 @@ import './styles.sass'
 
 import TextLink from '../TextLink/TextLink'
 import ComponentsContainer from '../ComponentsContainer/ComponentsContainer'
+import {
+  SELECTED_PAG_STYLE,
+  PAGINATION_STYLE,
+  SEARCH_BOX_PLACE_HOLDER,
+  TABLE_STYLE,
+  CONTAINER_STYLE,
+  SEARCH_BOX_STYLE,
+  TOP_100_URL,
+  SERVER_ERROR,
+  TOP_100_CLASS,
+  EMPTY_STRING,
+  COLUMN_FIELDS,
+  CERO,
+  ONE
+} from '../../helpers/strings'
 
-const selectedPagStyle = 'tableComp'
-const paginationStyle = 'paginationStyle'
-const searchBoxPlaceHolder = 'Search'
-const tableStyle = 'tableByProvider'
-const containerStyle = 'grayFont'
-const searchBoxStyle = 'searchBoxStyle'
-const columnFields = [
-  { id:'link', label: 'Url', width: 1 },
-  { id:'title', label: 'Title tag', width: 1 },
-]
-const getTextLink = (link) => (
-  <TextLink url={link} />
-)
+const getTextLink = (link) => (<TextLink url={link} />)
+const buildElementJson = (link, title) => ({ link, title })
 const buildDataAsJson = (data) => (
-  data.map((elem) => ({ 'link': getTextLink(elem[0]), 'title': elem[1]  }))
+  data.map((elem) => (buildElementJson(getTextLink(elem[0]), elem[1])))
 )
-const getTopRecentlyUrls = (updateState) => {
+const getTopRecentlyUrls = () => {
   return new Promise((resolve, reject) => {
-    axios.get(`https://urlshortapiserver.herokuapp.com/top100`)
+    axios.get(TOP_100_URL)
     .then(
       res => {
         const dataSetsJson = buildDataAsJson(res.data)
@@ -43,44 +47,43 @@ class TopRecently extends Component {
 
     this.state = {
       datasets: [],
-      successRequest: 0,
-      errorMessage: "",
+      successRequest: CERO,
+      errorMessage: EMPTY_STRING,
     }
   }
 
   render() {
-    const emptyValidation = this.state.datasets.length === 0 && !this.state.successRequest
-        
+    const { errorMessage, datasets, successRequest } = this.state    
+    const emptyValidation = datasets.length === CERO && !successRequest
+
     if(emptyValidation){
 
       getTopRecentlyUrls().then(
-        resolve =>
-        {
-          this.setState({ datasets: resolve, successRequest: 1 })
+        resolve => {
+          this.setState({ datasets: resolve, successRequest: ONE })
         },
         error => {
-          this.setState({ errorMessage: "There was an error with server connection !" })
+          this.setState({ errorMessage: SERVER_ERROR })
         }
       )
     }
 
     return (
-      <div className="top100Area">
-        {this.state.errorMessage === ""
+      <div className={TOP_100_CLASS}>
+        {errorMessage === EMPTY_STRING
         ?<ComponentsContainer
           tractNumber={5}
           maxItemsPag={5}
-          columnFields={columnFields}
-          dataSets={this.state.datasets}
-          searchBoxPlaceHolder={searchBoxPlaceHolder}
-          containerStyle={containerStyle}
-          selectedItemPagStyle={selectedPagStyle}
-          paginationStyle={paginationStyle}
-          tableStyle={tableStyle}
-          searchBoxStyle={searchBoxStyle}
+          columnFields={COLUMN_FIELDS}
+          dataSets={datasets}
+          searchBoxPlaceHolder={SEARCH_BOX_PLACE_HOLDER}
+          containerStyle={CONTAINER_STYLE}
+          selectedItemPagStyle={SELECTED_PAG_STYLE}
+          paginationStyle={PAGINATION_STYLE}
+          tableStyle={TABLE_STYLE}
+          searchBoxStyle={SEARCH_BOX_STYLE}
         />
-        : <h2>{this.state.errorMessage}</h2>
-        }
+        : <h2>{errorMessage}</h2>}
       </div>
     )
   }
