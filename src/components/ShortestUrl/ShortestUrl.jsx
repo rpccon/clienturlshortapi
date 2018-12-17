@@ -5,9 +5,16 @@ import './style.sass'
 
 import TextLink from '../TextLink/TextLink'
 
+const VALIDATE_FULL_PATH = "https://urlshortapiserver.herokuapp.com/validateFullPath"
+const URL_NO_WORKING = "Url indicated doesn't work, make sure it's correct !"
+const EMPTY_STRING = ""
+const SERVER_ERROR = "There was an error with server connection !"
+const URL_NO_INSERTED = "You need to insert an URL"
 const createGetShortestUrl = (Url) => {
   return new Promise((resolve, reject) => {
-    axios.get(`https://urlshortapiserver.herokuapp.com/validateFullPath?url=${Url}`)
+    axios.post(VALIDATE_FULL_PATH,{
+      "url": Url
+    })
     .then(
       res => {
         resolve(res.data)
@@ -22,9 +29,9 @@ class ShortestUrl extends Component {
     super(props)
 
     this.state = {
-      insertedUrl: "",
-      response: "",
-      inputValue: "",
+      insertedUrl: EMPTY_STRING,
+      response: EMPTY_STRING,
+      inputValue: EMPTY_STRING,
       action: 1,
     }
   }
@@ -38,22 +45,21 @@ class ShortestUrl extends Component {
   processClick = () => {
     const finalValue = this.state.inputValue
 
-    if(finalValue !== ""){
+    if(finalValue !== EMPTY_STRING){
       
       createGetShortestUrl(finalValue).then(
         resolve =>
         {
-          const newAction = "Url indicated doesn't work, make sure it's correct !"
-          const isRigthResponse = newAction === resolve
+          const isRigthResponse = URL_NO_WORKING === resolve
 
-          this.setState({ action: isRigthResponse, response: resolve, inputValue: "" })
+          this.setState({ action: isRigthResponse, response: resolve, inputValue: EMPTY_STRING })
         },
         error => {
-          this.setState({ response: "There was an error with server connection !", inputValue: "" })
+          this.setState({ response: SERVER_ERROR, inputValue: EMPTY_STRING })
         }
       )      
     } else {
-      this.setState({ response: "You need to insert an URL" })
+      this.setState({ response: URL_NO_INSERTED })
     }
   }
 
