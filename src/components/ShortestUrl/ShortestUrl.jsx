@@ -4,12 +4,19 @@ import axios from 'axios'
 import './style.sass'
 
 import TextLink from '../TextLink/TextLink'
+import {
+  VALIDATE_FULL_PATH,
+  URL_NO_WORKING,
+  SERVER_ERROR,
+  EMPTY_STRING,
+  URL_NO_INSERTED,
+} from '../../helpers/strings'
 
-const VALIDATE_FULL_PATH = "https://urlshortapiserver.herokuapp.com/validateFullPath"
-const URL_NO_WORKING = "Url indicated doesn't work, make sure it's correct !"
-const EMPTY_STRING = ""
-const SERVER_ERROR = "There was an error with server connection !"
-const URL_NO_INSERTED = "You need to insert an URL"
+
+
+
+
+
 const createGetShortestUrl = (Url) => {
   return new Promise((resolve, reject) => {
     axios.post(VALIDATE_FULL_PATH,{
